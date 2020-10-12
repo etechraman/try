@@ -1,0 +1,124 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> JSON 1</title>
+    <style>
+        #table {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #eee;
+        }
+
+        th {
+            background-color: #555;
+            color: #fff;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 0.5em 1em;
+        }
+    </style>
+
+</head>
+
+<body>
+    <table id="table">
+        <tr>
+            <th onclick="sortTable(0)">ID</th>
+            <th onclick="sortTable(1)">First Name</th>
+            <th onclick="sortTable(2)">Last Name</th>
+            <th>DOB</th>
+        </tr>
+    </table>
+</body>
+<script>
+    var JSONObj = [
+        { "firstname": "Rohit", "lastname": "Kapoor", "dob": "01/01/1996", "id": 1 },
+        { "firstname": "Mohit", "lastname": "Verma", "dob": "01/01/1998", "id": 2 },
+        { "firstname": "Sidhant", "lastname": "Malhotra", "dob": "01/01/1995", "id": 3 }
+    ]
+    const body = document.getElementsByTagName("body")[0];
+    const table = document.getElementById("table");
+    for (var i = 0; i < JSONObj.length; i++) {
+        let row = table.insertRow();
+
+        const cell_1 = row.insertCell();
+        cell_1.innerHTML = JSONObj[i].id;
+
+        const cell_2 = row.insertCell();
+        cell_2.innerHTML = JSONObj[i].firstname;
+
+        const cell_3 = row.insertCell();
+        cell_3.innerHTML = JSONObj[i].lastname;
+
+        const cell_4 = row.insertCell();
+        cell_4.innerHTML = JSONObj[i].dob;
+    }
+    body.appendChild(table);
+
+
+
+
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("table");
+        switching = true;
+        //Set the sorting direction to ascending:
+        dir = "asc";
+        /*Make a loop that will continue until
+        no switching has been done:*/
+        while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /*Loop through all table rows (except the
+            first, which contains table headers):*/
+            for (i = 1; i < (rows.length - 1); i++) {
+                //start by saying there should be no switching:
+                shouldSwitch = false;
+                /*Get the two elements you want to compare,
+                one from current row and one from the next:*/
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /*check if the two rows should switch place,
+                based on the direction, asc or desc:*/
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        //if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /*If a switch has been marked, make the switch
+                and mark that a switch has been done:*/
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                //Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /*If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again.*/
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
+
+</html>

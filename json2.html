@@ -1,0 +1,194 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> JSON 2</title>
+    <style>
+        form {
+            margin-left: 720px;
+            margin-bottom: 50px;
+            margin-top: 40px;
+        }
+
+        #table {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+
+        tr:nth-child(odd) {
+            background-color: #eee;
+        }
+
+        thead tr td,
+        th {
+            background-color: #555;
+            color: #fff;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 0.5em 1em;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div>
+
+
+        <form id="userform">
+            <label for="">First Name : </label>
+            <input type="text" name="firstname" id="firstname" required><br><br>
+            <label for="">Last Name : </label>
+            <input type="text" name="lastname" id="lastname" required><br><br>
+            <label for="">Date of birth : </label>
+            <input type="date" name="dob" id="dob" required><br><br>
+            <button onclick="addperson()">ADD</button>
+            <button onclick="sortTable(3)">Sort By Date</button>
+            <button onclick="sortTable(1)">Sort By First Name</button>
+            <button onclick="sortTable(2)">Sort By Last Name</button>
+        </form>
+
+        <table id="table">
+            <tr>
+                <th onclick="sortTable(0)">ID</th>
+                <th onclick="sortTable(1)">First Name</th>
+                <th onclick="sortTable(2)">Last Name</th>
+                <th onclick="sortTable(3)">DOB</th>
+            </tr>
+        </table>
+    </div>
+</body>
+<script>
+    var JSONobj = [
+        { "firstname": "Rohit", "lastname": "Kapoor", "dob": "1996-01-01", "id": 1 },
+        { "firstname": "Mohit", "lastname": "Verma", "dob": "1998-04-01", "id": 2 },
+        { "firstname": "Sidhant", "lastname": "Malhotra", "dob": "1995-12-11", "id": 3 }
+    ]
+    var body = document.getElementsByTagName("body")[0];
+    var table = document.getElementById("table");
+    function initialTable() {
+        for (var i = 0; i < JSONobj.length; i++) {
+            const row = table.insertRow();
+
+            const cell_1 = row.insertCell();
+            cell_1.innerHTML = JSONobj[i].id;
+
+            const cell_2 = row.insertCell();
+            cell_2.innerHTML = JSONobj[i].firstname;
+
+            const cell_3 = row.insertCell();
+            cell_3.innerHTML = JSONobj[i].lastname;
+
+            const cell_4 = row.insertCell();
+            cell_4.innerHTML = JSONobj[i].dob;
+        }
+        body.appendChild(table);
+    }
+
+
+    function addperson() {
+        event.preventDefault();
+        let n = JSONobj.length;
+        if (document.getElementById('firstname').value != "" && document.getElementById('lastname').value != "" && document.getElementById('firstname').value != "") {
+            let user = {
+                "id": n += 1,
+                "firstname": document.getElementById('firstname').value,
+                "lastname": document.getElementById('lastname').value,
+                "dob": document.getElementById('dob').value
+            }
+            JSONobj.push(user);
+
+            document.getElementById("userform").reset();
+            document.getElementById("table").remove();
+
+            const table = document.createElement("table");
+            table.setAttribute("id", "table");
+
+
+            const id = document.createElement("th");
+            id.textContent = "ID";
+
+            table.appendChild(id);
+
+            const fName = document.createElement("th");
+            fName.textContent = "First Name";
+            table.appendChild(fName);
+
+            const lName = document.createElement("th");
+            lName.textContent = "Last Name";
+            table.appendChild(lName);
+
+            const dob = document.createElement("th");
+            dob.textContent = "DOB";
+            table.appendChild(dob);
+
+
+            var arrayLength = JSONobj.length;
+
+            for (let i = 0; i < arrayLength; i++) {
+                var row = table.insertRow();
+
+                var cell = row.insertCell();
+                cell.innerHTML = JSONobj[i].id;
+
+                var cell = row.insertCell();
+                cell.innerHTML = JSONobj[i].firstname;
+
+                var cell = row.insertCell();
+                cell.innerHTML = JSONobj[i].lastname;
+
+                var cell = row.insertCell();
+                cell.innerHTML = JSONobj[i].dob
+            }
+            body.appendChild(table);
+        }
+        else (
+            alert("Please enter the valid details")
+        )
+
+    }
+    function sortTable(n) {
+        console.log("n", n)
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("table");
+        console.log(table);
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 0; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
+
+</html>
